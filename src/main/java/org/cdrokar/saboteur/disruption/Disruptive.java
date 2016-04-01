@@ -1,5 +1,6 @@
 package org.cdrokar.saboteur.disruption;
 
+import com.google.common.collect.Sets;
 import org.cdrokar.saboteur.invocation.SaboteurInvocation;
 import org.cdrokar.saboteur.invocation.SaboteurInvocation;
 import com.google.common.base.Joiner;
@@ -15,18 +16,20 @@ import java.util.stream.Collectors;
  */
 public interface Disruptive extends Function<SaboteurInvocation, Optional<Object>> {
 
+    Collection<Disruptive> ALL = Sets.newHashSet();
+
     String DEFAULT_MESSAGE = "Target has been sabotaged from a test or a manual intervention.";
 
     String getDescription();
 
     Collection<String> getInstructionKeys();
 
-    default String getDetailFrom(SaboteurInvocation i) {
+    default String getDetailFrom(SaboteurInvocation inv) {
 
         String instructions = Joiner.on(",").join(
                 getInstructionKeys().stream()
-                        .filter(k -> i.getInstructions().containsKey(k))
-                        .map(k -> k + ": " + i.getInstructions().get(k))
+                        .filter(key -> inv.getInstructions().containsKey(key))
+                        .map(key -> key + ": " + inv.getInstructions().get(key))
                         .collect(Collectors.toList()));
 
         return new StringBuilder(DEFAULT_MESSAGE)
@@ -38,10 +41,10 @@ public interface Disruptive extends Function<SaboteurInvocation, Optional<Object
                 .append(instructions)
                 .append("/n")
                 .append(" > Target: ")
-                .append(i.getBeanDefinition().getClassName())
+                .append(inv.getBeanDefinition().getClassName())
                 .append("/n")
                 .append(" > Method: ")
-                .append(i.getMethodInvocation().getMethod().toGenericString())
+                .append(inv.getMethodInvocation().getMethod().toGenericString())
                 .append("/n")
                 .toString();
     }

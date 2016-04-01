@@ -1,14 +1,14 @@
 package org.cdrokar.saboteur;
 
-import org.cdrokar.saboteur.exception.TargetNotFoundException;
-import org.cdrokar.saboteur.disruption.Disruptive;
-import org.cdrokar.saboteur.exception.InstructionNotFoundException;
-import org.cdrokar.saboteur.domain.Configuration;
-import org.cdrokar.saboteur.domain.TargetProfile;
 import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
+import org.cdrokar.saboteur.disruption.Disruptive;
+import org.cdrokar.saboteur.domain.Configuration;
+import org.cdrokar.saboteur.domain.TargetProfile;
+import org.cdrokar.saboteur.exception.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -35,7 +35,7 @@ public class SaboteurController {
     @RequestMapping(value = "/disruptives", method = RequestMethod.GET)
     public Collection<Disruptive> getDisruptives() {
 
-        return repository.getDisruptives();
+        return Disruptive.ALL;
     }
 
     @RequestMapping(value = "/targets", method = RequestMethod.GET)
@@ -79,6 +79,15 @@ public class SaboteurController {
         return repository.getTarget(targetName).getInstructions();
     }
 
+    @RequestMapping(value = "/targets/{targetName}/instructions", method = RequestMethod.PUT)
+    public ResponseEntity setTargetInstructions(
+            @PathVariable String targetName,
+            @PathVariable Map<String, String> map) {
+
+        repository.getTarget(targetName).setInstructions(map);
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/targets/{targetName}/instructions/{key}", method = RequestMethod.GET)
     public String getTargetInstruction(
             @PathVariable String targetName,
@@ -87,18 +96,21 @@ public class SaboteurController {
         return repository.getTarget(targetName).getInstruction(key);
     }
 
-    @ExceptionHandler(TargetNotFoundException.class)
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    public Map<String, String> handleTargetNotFoundException(TargetNotFoundException ex) {
-        log.error(ex.getMessage(), ex);
-        return ImmutableMap.of(ex.getClass().getSimpleName(), ex.getMessage());
+    @RequestMapping(value = "/targets/{targetName}/instructions/{key}", method = RequestMethod.PUT)
+    public ResponseEntity setTargetInstruction(
+            @PathVariable String targetName,
+            @PathVariable String key,
+            @RequestBody String value) {
+
+        repository.getTarget(targetName).setInstruction(key, value);
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
-    @ExceptionHandler(InstructionNotFoundException.class)
+    @ExceptionHandler(ValidationException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    public Map<String, String> handleInstructionNotFoundException(InstructionNotFoundException ex) {
+    public Map<String, String> handleTargetNotFoundException(ValidationException ex) {
         log.error(ex.getMessage(), ex);
-        return ImmutableMap.of(ex.getClass().getSimpleName(), ex.getMessage());
+        return ImmutableMap.of(ex.getType().name(), ex.getMessage());
     }
 
 }

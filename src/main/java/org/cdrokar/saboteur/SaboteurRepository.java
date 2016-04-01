@@ -1,15 +1,13 @@
 package org.cdrokar.saboteur;
 
-import org.cdrokar.saboteur.domain.BeanDefinition;
-import org.cdrokar.saboteur.infiltration.TargetMatchPredicate;
-import org.cdrokar.saboteur.domain.BeanDefinition;
-import org.cdrokar.saboteur.util.ConfigReader;
+import lombok.Getter;
 import org.cdrokar.saboteur.disruption.Disruptive;
+import org.cdrokar.saboteur.domain.BeanDefinition;
 import org.cdrokar.saboteur.domain.Configuration;
 import org.cdrokar.saboteur.domain.TargetProfile;
+import org.cdrokar.saboteur.exception.ValidationException;
 import org.cdrokar.saboteur.infiltration.TargetMatchPredicate;
-import com.google.common.collect.Lists;
-import lombok.Getter;
+import org.cdrokar.saboteur.util.ConfigReader;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -26,9 +24,6 @@ import java.util.stream.Collectors;
 public class SaboteurRepository {
 
     private final AtomicLong version = new AtomicLong(0);
-
-    @Getter
-    private final Collection<Disruptive> disruptives = Lists.newArrayList();
 
     @Getter
     private final Configuration configuration;
@@ -58,17 +53,19 @@ public class SaboteurRepository {
         return targetProfileByPath.values();
     }
 
-    public TargetProfile getTarget(String name) {
-        return targetProfilesByAlias.get(name);
+    public TargetProfile getTarget(String target) {
+        TargetProfile profile = targetProfilesByAlias.get(target);
+        if (profile == null) {
+            profile = targetProfileByPath.get(target);
+        }
+        if (profile == null) {
+            throw new ValidationException(ValidationException.Type.TARGET_NOT_FOUND, target);
+        }
+        return profile;
     }
-
 
     public Long getVersion() {
         return version.get();
-    }
-
-    public void addDisruptive(Disruptive disruptive) {
-        disruptives.add(disruptive);
     }
 
     public TargetProfile getTargetProfileFor(BeanDefinition beanDefinition) {
@@ -84,7 +81,7 @@ public class SaboteurRepository {
     }
 
     public Collection<Disruptive> getDisruptives(Collection<String> instructions) {
-        return disruptives.stream()
+        return Disruptive.ALL.stream()
                 .filter(d -> !Collections.disjoint(instructions, d.getInstructionKeys()))
                 .collect(Collectors.toList());
     }

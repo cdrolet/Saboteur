@@ -16,7 +16,7 @@ public enum ConfigReader {
 
     INSTANCE;
 
-    private static final String DEFAULT_CONFIG_FILE_NAME = "default-saboteur.conf";
+    private static final String DEFAULT_CONFIG_FILE_NAME = "default.conf";
     private static final String CONFIG_FILE_NAME = "saboteur.conf";
 
     private DefaultResourceLoader defaultLoader = new DefaultResourceLoader();

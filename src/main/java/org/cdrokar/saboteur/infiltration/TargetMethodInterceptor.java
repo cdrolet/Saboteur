@@ -1,12 +1,11 @@
 package org.cdrokar.saboteur.infiltration;
 
-import org.cdrokar.saboteur.domain.BeanDefinition;
-import org.cdrokar.saboteur.domain.BeanDefinition;
-import org.cdrokar.saboteur.invocation.InvocationWorkflow;
-import org.cdrokar.saboteur.invocation.SourceInvocation;
 import lombok.Data;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
+import org.cdrokar.saboteur.domain.BeanDefinition;
+import org.cdrokar.saboteur.invocation.InvocationWorkflow;
+import org.cdrokar.saboteur.invocation.SourceInvocation;
 
 import java.util.function.Supplier;
 
