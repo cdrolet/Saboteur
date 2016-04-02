@@ -1,11 +1,8 @@
-package org.cdrokar.saboteur.disruption.provided;
+package org.cdrokar.saboteur.disruption;
 
 import org.cdrokar.saboteur.disruption.Disruptive;
 import org.cdrokar.saboteur.invocation.SaboteurInvocation;
-import org.cdrokar.saboteur.util.JavaScriptReader;
-import org.cdrokar.saboteur.disruption.Disruptive;
-import org.cdrokar.saboteur.invocation.SaboteurInvocation;
-import org.cdrokar.saboteur.util.JavaScriptReader;
+import org.cdrokar.saboteur.reader.JavaScriptReader;
 import com.google.common.collect.ImmutableList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

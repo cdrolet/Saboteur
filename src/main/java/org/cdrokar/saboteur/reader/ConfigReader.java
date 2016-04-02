@@ -1,4 +1,4 @@
-package org.cdrokar.saboteur.util;
+package org.cdrokar.saboteur.reader;
 
 import org.cdrokar.saboteur.domain.Configuration;
 import com.typesafe.config.Config;

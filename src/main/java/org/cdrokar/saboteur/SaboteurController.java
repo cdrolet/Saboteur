@@ -1,10 +1,10 @@
 package org.cdrokar.saboteur;
 
-import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
 import org.cdrokar.saboteur.disruption.Disruptive;
 import org.cdrokar.saboteur.domain.Configuration;
 import org.cdrokar.saboteur.domain.TargetProfile;
+import org.cdrokar.saboteur.exception.JavaScriptException;
 import org.cdrokar.saboteur.exception.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,7 +35,7 @@ public class SaboteurController {
     @RequestMapping(value = "/disruptives", method = RequestMethod.GET)
     public Collection<Disruptive> getDisruptives() {
 
-        return Disruptive.ALL;
+        return Disruptive.REGISTRY;
     }
 
     @RequestMapping(value = "/targets", method = RequestMethod.GET)
@@ -107,10 +107,16 @@ public class SaboteurController {
     }
 
     @ExceptionHandler(ValidationException.class)
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    public Map<String, String> handleTargetNotFoundException(ValidationException ex) {
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleValidationException(ValidationException ex) {
         log.error(ex.getMessage(), ex);
-        return ImmutableMap.of(ex.getType().name(), ex.getMessage());
+        return ex.toMap();
     }
 
+    @ExceptionHandler(JavaScriptException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public Map<String, Map<String, String>> handleValidationException(JavaScriptException ex) {
+        log.error(ex.getMessage(), ex);
+        return ex.toMap();
+    }
 }

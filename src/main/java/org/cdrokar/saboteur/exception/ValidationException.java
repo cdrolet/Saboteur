@@ -1,7 +1,12 @@
 package org.cdrokar.saboteur.exception;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableMap;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by cdrolet on 3/30/2016.
@@ -18,7 +23,9 @@ public class ValidationException extends RuntimeException {
         INSTRUCTION_KEY_ALREADY_DEFINED("Instruction key %s from component %s is already defined in component %s"),
         INSTRUCTION_NOT_FOUND("Instruction key %s is not part of %s instructions"),
         INSTRUCTION_IS_EMPTY("Instruction is empty for key %s"),
-        UNKNOWN_INSTRUCTION_KEY("Instruction key %s is unknown, valid instructions keys are: %s");
+        ALIAS_IS_UNDEFINED("Alias for profile classpath %s is undefined"),
+        CLASSPATH_IS_UNDEFINED("Classpath for profile alias %s is undefined"),
+        UNKNOWN_INSTRUCTION_KEY("Instruction key %s is unknown. The valid instructions keys are: %s");
 
         private final String message;
 
@@ -35,5 +42,7 @@ public class ValidationException extends RuntimeException {
         message = type.getMessage(arg);
     }
 
-
+    public Map<String, String> toMap() {
+        return ImmutableMap.of(type.name(), message);
+    }
 }

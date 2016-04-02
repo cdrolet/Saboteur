@@ -7,7 +7,7 @@ import org.cdrokar.saboteur.domain.Configuration;
 import org.cdrokar.saboteur.domain.TargetProfile;
 import org.cdrokar.saboteur.exception.ValidationException;
 import org.cdrokar.saboteur.infiltration.TargetMatchPredicate;
-import org.cdrokar.saboteur.util.ConfigReader;
+import org.cdrokar.saboteur.reader.ConfigReader;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -48,7 +48,6 @@ public class SaboteurRepository {
 
     }
 
-
     public Collection<TargetProfile> getTargets() {
         return targetProfileByPath.values();
     }
@@ -81,7 +80,7 @@ public class SaboteurRepository {
     }
 
     public Collection<Disruptive> getDisruptives(Collection<String> instructions) {
-        return Disruptive.ALL.stream()
+        return Disruptive.REGISTRY.stream()
                 .filter(d -> !Collections.disjoint(instructions, d.getInstructionKeys()))
                 .collect(Collectors.toList());
     }

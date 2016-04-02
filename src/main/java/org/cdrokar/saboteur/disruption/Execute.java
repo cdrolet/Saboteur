@@ -1,7 +1,7 @@
-package org.cdrokar.saboteur.disruption.provided;
+package org.cdrokar.saboteur.disruption;
 
 import org.cdrokar.saboteur.invocation.SaboteurInvocation;
-import org.cdrokar.saboteur.util.JavaScriptReader;
+import org.cdrokar.saboteur.reader.JavaScriptReader;
 import org.cdrokar.saboteur.disruption.Disruptive;
 import com.google.common.collect.ImmutableList;
 import lombok.SneakyThrows;

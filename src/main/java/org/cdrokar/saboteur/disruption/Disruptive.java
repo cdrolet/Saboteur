@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  */
 public interface Disruptive extends Function<SaboteurInvocation, Optional<Object>> {
 
-    Collection<Disruptive> ALL = Sets.newHashSet();
+    Collection<Disruptive> REGISTRY = Sets.newHashSet();
 
     String DEFAULT_MESSAGE = "Target has been sabotaged from a test or a manual intervention.";
 

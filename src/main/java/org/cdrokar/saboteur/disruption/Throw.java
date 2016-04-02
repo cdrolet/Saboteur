@@ -1,4 +1,4 @@
-package org.cdrokar.saboteur.disruption.provided;
+package org.cdrokar.saboteur.disruption;
 
 import org.cdrokar.saboteur.disruption.Disruptive;
 import org.cdrokar.saboteur.invocation.SaboteurInvocation;
