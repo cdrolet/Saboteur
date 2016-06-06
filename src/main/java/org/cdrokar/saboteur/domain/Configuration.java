@@ -1,14 +1,11 @@
 package org.cdrokar.saboteur.domain;
 
-import com.typesafe.config.Config;
 import lombok.Data;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-/**
- * Created by cdrolet on 3/6/2016.
- */
+import com.typesafe.config.Config;
 
 @Data
 public class Configuration {

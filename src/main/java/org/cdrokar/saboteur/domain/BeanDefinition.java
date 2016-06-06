@@ -1,11 +1,9 @@
 package org.cdrokar.saboteur.domain;
 
-import org.cdrokar.saboteur.SaboteurRepository;
 import lombok.Data;
 
-/**
- * Created by cdrolet on 3/27/2016.
- */
+import org.cdrokar.saboteur.SaboteurRepository;
+
 @Data
 public class BeanDefinition {
 
@@ -20,5 +18,4 @@ public class BeanDefinition {
         return beanClass.getPackage() != null
                 && beanClass.getPackage().getName().startsWith(SaboteurRepository.class.getPackage().getName());
     }
-
 }

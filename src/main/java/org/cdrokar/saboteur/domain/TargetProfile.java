@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Predicate;
 
 import org.cdrokar.saboteur.disruption.Throw;
@@ -14,11 +15,8 @@ import org.cdrokar.saboteur.validation.TargetProfileValidator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.typesafe.config.Config;
-
-/**
- * Created by cdrolet on 3/6/2016.
- */
 
 @Data
 @Builder
@@ -30,6 +28,8 @@ public class TargetProfile {
             .disrupted(false)
             .instructions(ImmutableMap.of(Throw.KEY_BEFORE_EXCEPTION_CLASS, SabotageException.class.getName()))
             .build();
+
+    private static final Set<String> aliases = Sets.newHashSet();
 
     private String alias;
 
@@ -47,9 +47,10 @@ public class TargetProfile {
 
         String classPath = config.getString("classPath");
 
+        String alias = getUniqueAlias(ConfigReader.INSTANCE.read(config, "alias", classPath.substring(classPath.lastIndexOf("."))));
+
         TargetProfile profile = builder()
-                //TODO may not work when multiple profile contain *
-                .alias(ConfigReader.INSTANCE.read(config, "alias", classPath.substring(classPath.lastIndexOf("."))))
+                .alias(alias)
                 .classPath(classPath)
                 .method(ConfigReader.INSTANCE.read(config, "method", "*"))
                 .disrupted(ConfigReader.INSTANCE.read(config, "disrupted", false))
@@ -60,6 +61,16 @@ public class TargetProfile {
         TargetProfileValidator.INSTANCE.accept(profile);
 
         return profile;
+    }
+
+    private static String getUniqueAlias(String source) {
+        String uniqueAlias = source;
+        int count = 0;
+        while(aliases.contains(uniqueAlias)) {
+            uniqueAlias = source + "(" + ++count + ")";
+        }
+        aliases.add(uniqueAlias);
+        return uniqueAlias;
     }
 
     @JsonIgnore
