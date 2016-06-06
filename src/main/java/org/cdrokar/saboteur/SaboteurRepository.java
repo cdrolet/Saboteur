@@ -1,25 +1,23 @@
 package org.cdrokar.saboteur;
 
 import lombok.Getter;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
+
 import org.cdrokar.saboteur.disruption.Disruptive;
 import org.cdrokar.saboteur.domain.BeanDefinition;
 import org.cdrokar.saboteur.domain.Configuration;
 import org.cdrokar.saboteur.domain.TargetProfile;
 import org.cdrokar.saboteur.exception.ValidationException;
-import org.cdrokar.saboteur.infiltration.TargetMatchPredicate;
+import org.cdrokar.saboteur.infiltration.TargetProfileComparator;
+import org.cdrokar.saboteur.infiltration.TargetProfileSelector;
 import org.cdrokar.saboteur.reader.ConfigReader;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.Collectors;
-
-/**
- * Created by cdrolet on 3/3/2016.
- */
 @Component
 public class SaboteurRepository {
 
@@ -68,13 +66,10 @@ public class SaboteurRepository {
     }
 
     public TargetProfile getTargetProfileFor(BeanDefinition beanDefinition) {
-        return targetProfileByPath.keySet()
+        return targetProfileByPath.values()
                 .stream()
-                .filter(path -> TargetMatchPredicate.INSTANCE.test(beanDefinition, path))
-                // TODO can't work for match parent type
-                .sorted(Comparator.reverseOrder())
-                // ---
-                .map(path -> targetProfileByPath.get(path))
+                .sorted(TargetProfileComparator.INSTANCE)
+                .filter(path -> TargetProfileSelector.INSTANCE.test(beanDefinition, path))
                 .findFirst()
                 .orElse(TargetProfile.DEFAULT);
     }
@@ -90,10 +85,6 @@ public class SaboteurRepository {
             return true;
         }
 
-        return targetProfileByPath.keySet()
-                .stream()
-                .anyMatch(profile -> TargetMatchPredicate.INSTANCE.test(beanDefinition, profile));
+        return getTargetProfileFor(beanDefinition) != TargetProfile.DEFAULT;
     }
-
-
 }

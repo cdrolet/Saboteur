@@ -1,20 +1,18 @@
 package org.cdrokar.saboteur.validation;
 
-import com.google.common.base.Joiner;
-import com.google.common.base.Strings;
-import org.cdrokar.saboteur.disruption.Disruptive;
-import org.cdrokar.saboteur.domain.TargetProfile;
-import org.cdrokar.saboteur.exception.ValidationException;
-
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-/**
- * Created by cdrolet on 4/1/2016.
- */
+import org.cdrokar.saboteur.disruption.Disruptive;
+import org.cdrokar.saboteur.domain.TargetProfile;
+import org.cdrokar.saboteur.exception.ValidationException;
+
+import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
+
 public enum TargetProfileValidator implements Consumer<TargetProfile> {
 
     INSTANCE;
@@ -24,7 +22,7 @@ public enum TargetProfileValidator implements Consumer<TargetProfile> {
 
         checkAlias(targetProfile.getAlias(), targetProfile.getClassPath());
 
-        checkClassPath(targetProfile.getAlias(), targetProfile.getClassPath());
+        checkClassPath(targetProfile.getAlias(), targetProfile.getClassPath(), targetProfile.isTargetSubclass());
 
         checkMethod(targetProfile.getClassPath(), targetProfile.getMethod());
 
@@ -38,13 +36,16 @@ public enum TargetProfileValidator implements Consumer<TargetProfile> {
         }
     }
 
-    private void checkClassPath(String alias, String classPath) {
+    private void checkClassPath(String alias, String classPath, boolean isTargettingSubclass) {
         if (Strings.isNullOrEmpty(classPath)) {
             String aliasName = Strings.isNullOrEmpty(alias) ? "{undefined}" : alias;
             throw new ValidationException(ValidationException.Type.CLASSPATH_IS_UNDEFINED, aliasName);
         }
 
         if (classPath.contains("*")) {
+            if (isTargettingSubclass) {
+                throw new ValidationException(ValidationException.Type.PARENT_CLASSPATH_SHOULD_NOT_CONTAIN_WILDCARD, classPath);
+            }
             return;
         }
 

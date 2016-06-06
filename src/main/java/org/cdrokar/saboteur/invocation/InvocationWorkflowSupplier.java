@@ -1,16 +1,12 @@
 package org.cdrokar.saboteur.invocation;
 
-import org.cdrokar.saboteur.domain.BeanDefinition;
-import org.cdrokar.saboteur.SaboteurRepository;
-import org.cdrokar.saboteur.domain.BeanDefinition;
-import org.cdrokar.saboteur.domain.TargetProfile;
 import lombok.RequiredArgsConstructor;
 
 import java.util.function.Supplier;
 
-/**
- * Created by cdrolet on 3/3/2016.
- */
+import org.cdrokar.saboteur.SaboteurRepository;
+import org.cdrokar.saboteur.domain.BeanDefinition;
+import org.cdrokar.saboteur.domain.TargetProfile;
 
 @RequiredArgsConstructor
 public class InvocationWorkflowSupplier implements Supplier<InvocationWorkflow> {

@@ -1,12 +1,11 @@
 package org.cdrokar.saboteur.exception;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableMap;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Map;
-import java.util.stream.Collectors;
+
+import com.google.common.collect.ImmutableMap;
 
 /**
  * Created by cdrolet on 3/30/2016.
@@ -25,7 +24,8 @@ public class ValidationException extends RuntimeException {
         INSTRUCTION_IS_EMPTY("Instruction is empty for key %s"),
         ALIAS_IS_UNDEFINED("Alias for profile classpath %s is undefined"),
         CLASSPATH_IS_UNDEFINED("Classpath for profile alias %s is undefined"),
-        UNKNOWN_INSTRUCTION_KEY("Instruction key %s is unknown. The valid instructions keys are: %s");
+        UNKNOWN_INSTRUCTION_KEY("Instruction key %s is unknown. The valid instructions keys are: %s"),
+        PARENT_CLASSPATH_SHOULD_NOT_CONTAIN_WILDCARD("Subclass classpath %s can't contain wildcard");
 
         private final String message;
 

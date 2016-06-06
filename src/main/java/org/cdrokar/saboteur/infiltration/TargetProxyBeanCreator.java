@@ -9,10 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 
-/**
- * Created by cdrolet on 3/2/2016.
- */
-
 @Component
 @SuppressWarnings("serial")
 public class TargetProxyBeanCreator extends AbstractAutoProxyCreator {

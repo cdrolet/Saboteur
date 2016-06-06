@@ -8,11 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;
 
-/**
- * Created by cdrolet on 3/4/2016.
- */
-
-
 @Component
 public class DisruptiveBeanPostProcessor implements BeanPostProcessor {
 

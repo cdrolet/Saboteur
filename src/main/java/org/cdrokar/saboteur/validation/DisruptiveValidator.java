@@ -1,18 +1,16 @@
 package org.cdrokar.saboteur.validation;
 
-import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
-import org.cdrokar.saboteur.disruption.Disruptive;
-import org.cdrokar.saboteur.exception.ValidationException;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-/**
- * Created by cdrolet on 4/1/2016.
- */
+import org.cdrokar.saboteur.disruption.Disruptive;
+import org.cdrokar.saboteur.exception.ValidationException;
+
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
+
 public enum DisruptiveValidator implements Consumer<Disruptive>{
 
     INSTANCE;

@@ -1,18 +1,20 @@
 package org.cdrokar.saboteur.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
-import com.typesafe.config.Config;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.Map;
+import java.util.function.Predicate;
+
 import org.cdrokar.saboteur.disruption.Throw;
 import org.cdrokar.saboteur.exception.SabotageException;
 import org.cdrokar.saboteur.reader.ConfigReader;
 import org.cdrokar.saboteur.validation.TargetProfileValidator;
 
-import java.util.Map;
-import java.util.function.Predicate;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
+import com.typesafe.config.Config;
 
 /**
  * Created by cdrolet on 3/6/2016.
@@ -33,6 +35,8 @@ public class TargetProfile {
 
     private String classPath;
 
+    private boolean targetSubclass;
+
     private String method;
 
     private boolean disrupted;
@@ -50,6 +54,7 @@ public class TargetProfile {
                 .method(ConfigReader.INSTANCE.read(config, "method", "*"))
                 .disrupted(ConfigReader.INSTANCE.read(config, "disrupted", false))
                 .instructions(ConfigReader.INSTANCE.read(config, "instructions", Maps.newHashMap()))
+                .targetSubclass(ConfigReader.INSTANCE.read(config, "targetSubclass", false))
                 .build();
 
         TargetProfileValidator.INSTANCE.accept(profile);
