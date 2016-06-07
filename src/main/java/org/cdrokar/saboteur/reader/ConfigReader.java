@@ -1,8 +1,5 @@
 package org.cdrokar.saboteur.reader;
 
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import org.cdrokar.saboteur.domain.Configuration;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
@@ -46,15 +43,6 @@ public enum ConfigReader {
 
     public String read(Config config, String path, String defaultValue) {
         return config.hasPath(path) ? config.getString(path) : defaultValue;
-    }
-
-    public Map<String, String> read(Config config, String path, Map<String, String> defaultValue) {
-
-        return config.hasPath(path)
-                ? config.getConfig(path).entrySet()
-                .stream()
-                .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue().unwrapped().toString()))
-                : defaultValue;
     }
 
 }

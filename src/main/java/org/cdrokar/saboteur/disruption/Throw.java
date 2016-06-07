@@ -1,22 +1,18 @@
 package org.cdrokar.saboteur.disruption;
 
-import org.cdrokar.saboteur.disruption.Disruptive;
-import org.cdrokar.saboteur.invocation.SaboteurInvocation;
-import org.cdrokar.saboteur.disruption.Disruptive;
-import org.cdrokar.saboteur.invocation.SaboteurInvocation;
-import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableList;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 
-/**
- * Created by cdrolet on 3/4/2016.
- */
+import org.cdrokar.saboteur.invocation.SaboteurInvocation;
+import org.springframework.stereotype.Component;
+
+import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableList;
+
 @Component
 @Slf4j
 public class Throw implements Disruptive {

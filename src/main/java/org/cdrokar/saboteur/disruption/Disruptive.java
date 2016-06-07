@@ -24,34 +24,36 @@ public interface Disruptive extends Function<SaboteurInvocation, Optional<Object
     default String getDetailFrom(SaboteurInvocation inv) {
 
         String instructions = Joiner.on(",").join(
-                getInstructionKeys().stream()
-                        .filter(key -> inv.getInstructions().containsKey(key))
-                        .map(key -> key + ": " + inv.getInstructions().get(key))
+                inv.getInstructions()
+                        .stream()
+                        .filter(i -> getInstructionKeys().contains(i.getKey()))
+                        .map(i -> i.getKey() + ": " + i.getValue())
                         .collect(Collectors.toList()));
 
         return new StringBuilder(DEFAULT_MESSAGE)
-                .append("/n")
+                .append("\n")
                 .append(" > Action: ")
                 .append(getDescription())
-                .append("/n")
+                .append("\n")
                 .append(" > Instructions: ")
                 .append(instructions)
-                .append("/n")
+                .append("\n")
                 .append(" > Target: ")
                 .append(inv.getBeanDefinition().getClassName())
-                .append("/n")
+                .append("\n")
                 .append(" > Method: ")
                 .append(inv.getMethodInvocation().getMethod().toGenericString())
-                .append("/n")
+                .append("\n")
                 .toString();
     }
 
     default Map<String, String> getInstructionFrom(SaboteurInvocation invocation) {
 
         Map<String, String> instructions = invocation
-                .getInstructions().keySet().stream()
-                .filter(k -> getInstructionKeys().contains(k))
-                .collect(Collectors.toMap(k -> k, k -> invocation.getInstructions().get(k)));
+                .getInstructions()
+                .stream()
+                .filter(i -> getInstructionKeys().contains(i.getKey()))
+                .collect(Collectors.toMap(i -> i.getKey(), i -> i.getValue()));
 
         if (instructions.isEmpty()) {
             throw new IllegalStateException("no instructions found for :" + getClass().getSimpleName());

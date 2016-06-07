@@ -24,7 +24,7 @@ public class TargetProxyBeanCreator extends AbstractAutoProxyCreator {
 
     @Override
     public int getOrder() {
-        return Ordered.LOWEST_PRECEDENCE;
+        return Ordered.HIGHEST_PRECEDENCE;
     }
 
     @Override
@@ -40,18 +40,22 @@ public class TargetProxyBeanCreator extends AbstractAutoProxyCreator {
             return DO_NOT_PROXY;
         }
 
+        if (!beanClass.getName().contains("Test")) {
+            return DO_NOT_PROXY;
+        }
+
         return getAdviceFor(beanDefinition);
     }
 
     @Override
     protected Object wrapIfNecessary(Object bean, String beanName, Object cacheKey) {
         try {
-            super.wrapIfNecessary(bean, beanName, cacheKey);
+            return super.wrapIfNecessary(bean, beanName, cacheKey);
         } catch (BeanCreationException | AopConfigException ex) {
+            //TODO add rejected target to the repository
             log.warn("unable to target: " + beanName);
             return bean;
         }
-        return bean;
     }
 
     private Object[] getAdviceFor(BeanDefinition beanDefinition) {

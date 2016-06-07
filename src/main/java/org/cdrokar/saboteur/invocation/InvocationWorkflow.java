@@ -3,11 +3,12 @@ package org.cdrokar.saboteur.invocation;
 import lombok.Builder;
 
 import java.util.Collection;
-import java.util.Map;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.cdrokar.saboteur.disruption.Disruptive;
+import org.cdrokar.saboteur.domain.Instruction;
 
 @Builder
 public class InvocationWorkflow {
@@ -20,7 +21,7 @@ public class InvocationWorkflow {
 
     private final Collection<Disruptive> disruptives;
 
-    private final Map<String, String> instructions;
+    private final List<Instruction> instructions;
 
     public Object invoke(SourceInvocation sourceInvocation) throws Throwable {
 

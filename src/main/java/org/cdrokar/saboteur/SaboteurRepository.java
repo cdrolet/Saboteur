@@ -11,11 +11,13 @@ import java.util.stream.Collectors;
 import org.cdrokar.saboteur.disruption.Disruptive;
 import org.cdrokar.saboteur.domain.BeanDefinition;
 import org.cdrokar.saboteur.domain.Configuration;
+import org.cdrokar.saboteur.domain.Instruction;
 import org.cdrokar.saboteur.domain.TargetProfile;
 import org.cdrokar.saboteur.exception.ValidationException;
 import org.cdrokar.saboteur.infiltration.TargetProfileComparator;
 import org.cdrokar.saboteur.infiltration.TargetProfileSelector;
 import org.cdrokar.saboteur.reader.ConfigReader;
+import org.cdrokar.saboteur.validation.TargetProfileValidator;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -50,7 +52,18 @@ public class SaboteurRepository {
         return targetProfileByPath.values();
     }
 
-    public TargetProfile getTarget(String target) {
+    public void saveProfile(TargetProfile profile) {
+
+        TargetProfileValidator.INSTANCE.accept(profile);
+
+        targetProfileByPath.put(profile.getClassPath(), profile);
+
+        targetProfilesByAlias.put(profile.getAlias(), profile);
+
+        version.incrementAndGet();
+    }
+
+    public TargetProfile getTargetProfile(String target) {
         TargetProfile profile = targetProfilesByAlias.get(target);
         if (profile == null) {
             profile = targetProfileByPath.get(target);
@@ -74,9 +87,11 @@ public class SaboteurRepository {
                 .orElse(TargetProfile.DEFAULT);
     }
 
-    public Collection<Disruptive> getDisruptives(Collection<String> instructions) {
+    public Collection<Disruptive> getDisruptives(Collection<Instruction> instructions) {
+
+        Collection<String> instructionKeys = instructions.stream().map((i) -> i.getKey()).collect(Collectors.toList());
         return Disruptive.REGISTRY.stream()
-                .filter(d -> !Collections.disjoint(instructions, d.getInstructionKeys()))
+                .filter(d -> !Collections.disjoint(instructionKeys, d.getInstructionKeys()))
                 .collect(Collectors.toList());
     }
 

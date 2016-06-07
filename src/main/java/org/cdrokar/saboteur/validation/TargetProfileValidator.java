@@ -1,12 +1,13 @@
 package org.cdrokar.saboteur.validation;
 
 import java.util.Arrays;
-import java.util.Map;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.cdrokar.saboteur.disruption.Disruptive;
+import org.cdrokar.saboteur.domain.Instruction;
 import org.cdrokar.saboteur.domain.TargetProfile;
 import org.cdrokar.saboteur.exception.ValidationException;
 
@@ -54,11 +55,16 @@ public enum TargetProfileValidator implements Consumer<TargetProfile> {
         }
     }
 
-    private void checkInstructions(Map<String, String> instructions) {
+    private void checkInstructions(List<Instruction> instructions) {
 
-        instructions.keySet().stream().forEach((key) -> checkInstructionKeyExist(key));
+        instructions.stream().forEach(
+                (instruction) -> checkInstruction(instruction)
+        );
+    }
 
-        instructions.values().stream().forEach((value) -> checkInstructionIsNotEmpty(value));
+    private void checkInstruction(Instruction instruction) {
+        checkInstructionKeyExist(instruction.getKey());
+        checkInstructionIsNotEmpty(instruction.getValue());
     }
 
     private void checkInstructionKeyExist(String key) {

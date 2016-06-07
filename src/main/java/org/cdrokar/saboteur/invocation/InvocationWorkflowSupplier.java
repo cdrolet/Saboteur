@@ -42,7 +42,7 @@ public class InvocationWorkflowSupplier implements Supplier<InvocationWorkflow> 
 
         return InvocationWorkflow.builder()
                 .disrupted(targetProfile.isDisrupted())
-                .disruptives(repository.getDisruptives(targetProfile.getInstructions().keySet()))
+                .disruptives(repository.getDisruptives(targetProfile.getInstructions()))
                 .methodFilter(targetProfile.getMethodPredicate())
                 .instructions(targetProfile.getInstructions())
                 .build();
