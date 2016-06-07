@@ -1,16 +1,21 @@
 package org.cdrokar.saboteur.infiltration;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.cdrokar.saboteur.SaboteurRepository;
 import org.cdrokar.saboteur.domain.BeanDefinition;
 import org.cdrokar.saboteur.invocation.InvocationWorkflowSupplier;
 import org.springframework.aop.TargetSource;
+import org.springframework.aop.framework.AopConfigException;
 import org.springframework.aop.framework.autoproxy.AbstractAutoProxyCreator;
+import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 
 @Component
 @SuppressWarnings("serial")
+@Slf4j
 public class TargetProxyBeanCreator extends AbstractAutoProxyCreator {
 
 
@@ -19,7 +24,7 @@ public class TargetProxyBeanCreator extends AbstractAutoProxyCreator {
 
     @Override
     public int getOrder() {
-        return Ordered.HIGHEST_PRECEDENCE;
+        return Ordered.LOWEST_PRECEDENCE;
     }
 
     @Override
@@ -38,6 +43,17 @@ public class TargetProxyBeanCreator extends AbstractAutoProxyCreator {
         return getAdviceFor(beanDefinition);
     }
 
+    @Override
+    protected Object wrapIfNecessary(Object bean, String beanName, Object cacheKey) {
+        try {
+            super.wrapIfNecessary(bean, beanName, cacheKey);
+        } catch (BeanCreationException | AopConfigException ex) {
+            log.warn("unable to target: " + beanName);
+            return bean;
+        }
+        return bean;
+    }
+
     private Object[] getAdviceFor(BeanDefinition beanDefinition) {
 
         return new Object[]{
@@ -45,9 +61,6 @@ public class TargetProxyBeanCreator extends AbstractAutoProxyCreator {
                         beanDefinition,
                         new InvocationWorkflowSupplier(repository, beanDefinition))};
     }
-
-
-
 
 }
 

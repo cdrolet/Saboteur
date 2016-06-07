@@ -37,7 +37,7 @@
     </scm>
 
     <properties>
-        <spring.version>1.3.3.RELEASE</spring.version>
+        <spring.version>1.3.5.RELEASE</spring.version>
         <guava.version>19.0</guava.version>
         <typesafe.version>1.2.1</typesafe.version>
         <lombok.version>1.16.8</lombok.version>

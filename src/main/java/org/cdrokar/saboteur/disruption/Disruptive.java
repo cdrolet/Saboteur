@@ -1,19 +1,16 @@
 package org.cdrokar.saboteur.disruption;
 
-import com.google.common.collect.Sets;
-import org.cdrokar.saboteur.invocation.SaboteurInvocation;
-import org.cdrokar.saboteur.invocation.SaboteurInvocation;
-import com.google.common.base.Joiner;
-
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-/**
- * Created by cdrolet on 3/3/2016 .
- */
+import org.cdrokar.saboteur.invocation.SaboteurInvocation;
+
+import com.google.common.base.Joiner;
+import com.google.common.collect.Sets;
+
 public interface Disruptive extends Function<SaboteurInvocation, Optional<Object>> {
 
     Collection<Disruptive> REGISTRY = Sets.newHashSet();

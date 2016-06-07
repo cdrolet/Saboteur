@@ -20,9 +20,8 @@ public class SaboteurController {
     private final SaboteurRepository repository;
 
     @RequestMapping(method = RequestMethod.GET, value = "/disruptives")
-    Collection<Disruptive> getDisruptives() {
+    public Collection<Disruptive> getDisruptives() {
         return Disruptive.REGISTRY;
     }
 
-    
 }

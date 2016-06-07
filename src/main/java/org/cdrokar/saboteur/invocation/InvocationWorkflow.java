@@ -1,7 +1,5 @@
 package org.cdrokar.saboteur.invocation;
 
-import org.cdrokar.saboteur.disruption.Disruptive;
-import org.cdrokar.saboteur.disruption.Disruptive;
 import lombok.Builder;
 
 import java.util.Collection;
@@ -9,9 +7,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-/**
- * Created by cdrolet on 3/3/2016.
- */
+import org.cdrokar.saboteur.disruption.Disruptive;
+
 @Builder
 public class InvocationWorkflow {
 

@@ -1,13 +1,11 @@
 package org.cdrokar.saboteur.invocation;
 
-import org.cdrokar.saboteur.domain.TargetProfile;
 import lombok.Getter;
 
 import java.util.Map;
 
-/**
- * Created by cdrolet on 3/12/2016.
- */
+import org.cdrokar.saboteur.domain.TargetProfile;
+
 @Getter
 public class SaboteurInvocation extends SourceInvocation {
 
