@@ -25,6 +25,11 @@ public class TargetProxyBeanCreator extends AbstractAutoProxyCreator {
     @Override
     protected Object[] getAdvicesAndAdvisorsForBean(Class<?> beanClass, String beanName, TargetSource targetSource) {
 
+        if (beanClass.getPackage() != null
+                && beanClass.getPackage().getName().startsWith("org.springframework.boot")) {
+            return DO_NOT_PROXY;
+        }
+
         BeanDefinition beanDefinition = new BeanDefinition(beanClass, beanName);
 
         if (beanDefinition.isSaboteurBean()) {

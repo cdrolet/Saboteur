@@ -24,10 +24,12 @@ public enum ConfigReader {
         Config defaultConfig = ConfigFactory.load(DEFAULT_CONFIG_FILE_NAME);
 
         Resource resource = defaultLoader.getResource("classpath:" + CONFIG_FILE_NAME);
+/*
         if (!resource.exists()) {
             //TODO need better feedback
             throw new IllegalStateException("RESOURCE NOT FOUND");
         }
+*/
         return new Configuration(ConfigFactory.load(CONFIG_FILE_NAME)
                 .withFallback(defaultConfig)
                 .root()
