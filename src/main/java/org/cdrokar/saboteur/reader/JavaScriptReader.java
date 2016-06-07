@@ -1,16 +1,12 @@
 package org.cdrokar.saboteur.reader;
 
 
-import org.cdrokar.saboteur.exception.JavaScriptException;
-import org.cdrokar.saboteur.exception.ValidationException;
-
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
-/**
- * Created by cdrolet on 3/12/2016.
- */
+import org.cdrokar.saboteur.exception.JavaScriptException;
+
 
 public enum JavaScriptReader {
 

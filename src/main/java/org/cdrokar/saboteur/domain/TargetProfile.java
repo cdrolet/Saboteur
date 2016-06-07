@@ -1,24 +1,26 @@
 package org.cdrokar.saboteur.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
-import org.cdrokar.saboteur.disruption.Throw;
-import org.cdrokar.saboteur.exception.SabotageException;
 import org.cdrokar.saboteur.reader.ConfigReader;
 import org.cdrokar.saboteur.validation.TargetProfileValidator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 import com.typesafe.config.Config;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class TargetProfile {
 
@@ -26,7 +28,7 @@ public class TargetProfile {
             .alias("default")
             .classPath("*")
             .disrupted(false)
-            .instructions(ImmutableMap.of(Throw.KEY_BEFORE_EXCEPTION_CLASS, SabotageException.class.getName()))
+            .instructions(ImmutableList.of(Instruction.DEFAULT))
             .build();
 
     private static final Set<String> aliases = Sets.newHashSet();
@@ -41,7 +43,7 @@ public class TargetProfile {
 
     private boolean disrupted;
 
-    private final Map<String, String> instructions;
+    private List<Instruction> instructions;
 
     public static TargetProfile from(Config config) {
 
@@ -54,7 +56,10 @@ public class TargetProfile {
                 .classPath(classPath)
                 .method(ConfigReader.INSTANCE.read(config, "method", "*"))
                 .disrupted(ConfigReader.INSTANCE.read(config, "disrupted", false))
-                .instructions(ConfigReader.INSTANCE.read(config, "instructions", Maps.newHashMap()))
+                .instructions(config.getConfigList("instructions")
+                        .stream()
+                        .map(c -> Instruction.from(c))
+                        .collect(Collectors.toList()))
                 .targetSubclass(ConfigReader.INSTANCE.read(config, "targetSubclass", false))
                 .build();
 
@@ -66,7 +71,7 @@ public class TargetProfile {
     private static String getUniqueAlias(String source) {
         String uniqueAlias = source;
         int count = 0;
-        while(aliases.contains(uniqueAlias)) {
+        while (aliases.contains(uniqueAlias)) {
             uniqueAlias = source + "(" + ++count + ")";
         }
         aliases.add(uniqueAlias);
@@ -82,6 +87,7 @@ public class TargetProfile {
         return (s) -> s.equalsIgnoreCase(method);
     }
 
+/*
     public String getInstruction(String key) {
         return instructions.get(key);
     }
@@ -93,5 +99,6 @@ public class TargetProfile {
     public void setInstruction(String key, String value) {
         instructions.put(key, value);
     }
+*/
 
 }
