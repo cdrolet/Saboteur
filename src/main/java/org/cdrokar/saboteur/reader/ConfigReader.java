@@ -1,17 +1,15 @@
 package org.cdrokar.saboteur.reader;
 
-import org.cdrokar.saboteur.domain.Configuration;
-import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
-import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.core.io.Resource;
-
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * Created by cdrolet on 3/19/2016.
- */
+import org.cdrokar.saboteur.domain.Configuration;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
+
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+
 public enum ConfigReader {
 
     INSTANCE;
