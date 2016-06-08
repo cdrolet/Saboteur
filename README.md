@@ -8,5 +8,8 @@ For example:
 - Is my application handling correctly retry mechanism ? 
 
 
+To "infiltrate" an application, 
+you need to add the saboteur library in the application dependency.
+
 
 
