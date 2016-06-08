@@ -14,6 +14,7 @@ import org.cdrokar.saboteur.reader.ConfigReader;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.typesafe.config.Config;
 
@@ -55,10 +56,10 @@ public class TargetProfile {
                 .classPath(classPath)
                 .method(ConfigReader.INSTANCE.read(config, "method", DEFAULT.method))
                 .disrupted(ConfigReader.INSTANCE.read(config, "disrupted", DEFAULT.disrupted))
-                .instructions(config.getConfigList("instructions")
+                .instructions(Lists.reverse(config.getConfigList("instructions")
                         .stream()
                         .map(c -> Instruction.from(c))
-                        .collect(Collectors.toList()))
+                        .collect(Collectors.toList())))
                 .targetSubclass(ConfigReader.INSTANCE.read(config, "targetSubclass", DEFAULT.targetSubclass))
                 .build();
 
