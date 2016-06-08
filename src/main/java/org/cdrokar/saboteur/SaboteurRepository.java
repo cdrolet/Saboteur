@@ -52,14 +52,33 @@ public class SaboteurRepository {
         return targetProfileByPath.values();
     }
 
-    public void saveProfile(TargetProfile profile) {
+    public void saveTargets(Collection<TargetProfile> targets) {
 
-        TargetProfileValidator.INSTANCE.accept(profile);
+        targets.stream()
+                .forEach(p -> TargetProfileValidator.INSTANCE.accept(p));
 
-        targetProfileByPath.put(profile.getClassPath(), profile);
+        targets.stream()
+                .forEach(p -> saveToMap(p));
 
-        targetProfilesByAlias.put(profile.getAlias(), profile);
+        version.incrementAndGet();
+    }
 
+    public void saveTarget(TargetProfile target) {
+
+        TargetProfileValidator.INSTANCE.accept(target);
+
+        saveToMap(target);
+
+        updateVersion();
+    }
+
+    private void saveToMap(TargetProfile target) {
+        targetProfileByPath.put(target.getClassPath(), target);
+
+        targetProfilesByAlias.put(target.getAlias(), target);
+    }
+
+    public void updateVersion() {
         version.incrementAndGet();
     }
 
