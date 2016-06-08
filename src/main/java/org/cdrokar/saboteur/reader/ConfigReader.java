@@ -1,6 +1,7 @@
 package org.cdrokar.saboteur.reader;
 
 import org.cdrokar.saboteur.domain.Configuration;
+import org.cdrokar.saboteur.exception.ValidationException;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 
@@ -11,24 +12,23 @@ public enum ConfigReader {
 
     INSTANCE;
 
-    private static final String DEFAULT_CONFIG_FILE_NAME = "default.conf";
+    //    private static final String DEFAULT_CONFIG_FILE_NAME = "default.conf";
     private static final String CONFIG_FILE_NAME = "saboteur.conf";
 
     private DefaultResourceLoader defaultLoader = new DefaultResourceLoader();
 
     public Configuration load() {
 
-        Config defaultConfig = ConfigFactory.load(DEFAULT_CONFIG_FILE_NAME);
+        //      Config defaultConfig = ConfigFactory.load(DEFAULT_CONFIG_FILE_NAME);
 
         Resource resource = defaultLoader.getResource("classpath:" + CONFIG_FILE_NAME);
-/*
+
         if (!resource.exists()) {
-            //TODO need better feedback
-            throw new IllegalStateException("RESOURCE NOT FOUND");
+            throw new ValidationException(ValidationException.Type.CONFIGURATION_FILE_IS_MISSING, "CONFIG_FILE_NAME");
         }
-*/
+
         return new Configuration(ConfigFactory.load(CONFIG_FILE_NAME)
-                .withFallback(defaultConfig)
+//                .withFallback(defaultConfig)
                 .root()
                 .toConfig());
     }

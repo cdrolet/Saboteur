@@ -11,7 +11,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.cdrokar.saboteur.reader.ConfigReader;
-import org.cdrokar.saboteur.validation.TargetProfileValidator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.ImmutableList;
@@ -54,16 +53,14 @@ public class TargetProfile {
         TargetProfile profile = builder()
                 .alias(alias)
                 .classPath(classPath)
-                .method(ConfigReader.INSTANCE.read(config, "method", "*"))
-                .disrupted(ConfigReader.INSTANCE.read(config, "disrupted", false))
+                .method(ConfigReader.INSTANCE.read(config, "method", DEFAULT.method))
+                .disrupted(ConfigReader.INSTANCE.read(config, "disrupted", DEFAULT.disrupted))
                 .instructions(config.getConfigList("instructions")
                         .stream()
                         .map(c -> Instruction.from(c))
                         .collect(Collectors.toList()))
-                .targetSubclass(ConfigReader.INSTANCE.read(config, "targetSubclass", false))
+                .targetSubclass(ConfigReader.INSTANCE.read(config, "targetSubclass", DEFAULT.targetSubclass))
                 .build();
-
-        TargetProfileValidator.INSTANCE.accept(profile);
 
         return profile;
     }

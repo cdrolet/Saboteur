@@ -96,6 +96,7 @@ public class SaboteurRepository {
     }
 
     public boolean isBeanInfiltrated(BeanDefinition beanDefinition) {
+
         if (configuration.isInfiltrateAll()) {
             return true;
         }

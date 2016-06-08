@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import org.cdrokar.saboteur.disruption.Throw;
 import org.cdrokar.saboteur.exception.SabotageException;
+import org.cdrokar.saboteur.reader.ConfigReader;
 
 import com.typesafe.config.Config;
 
@@ -21,7 +22,7 @@ public class Instruction {
 
     public static Instruction from(Config config) {
         return new Instruction(
-                config.getString("key"),
-                config.getString("value"));
+                ConfigReader.INSTANCE.read(config, "key", DEFAULT.key),
+                ConfigReader.INSTANCE.read(config, "value", DEFAULT.value));
     }
 }
