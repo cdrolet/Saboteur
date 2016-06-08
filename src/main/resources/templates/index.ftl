@@ -15,7 +15,7 @@
 
 
 <div class="container">
-    <table class="table">
+    <table id="effects" class="table">
         <tr>
             <th>Description</th>
             <th>Path</th>
@@ -30,11 +30,6 @@
         </#list>
 
     </table>
-</div>
-<div class="container">
-  <div class="alert alert-info text-center" role="alert">
-  BlaBlaBla
-  </div>
 </div>
 
 </body>
