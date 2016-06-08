@@ -40,10 +40,6 @@ public class TargetProxyBeanCreator extends AbstractAutoProxyCreator {
             return DO_NOT_PROXY;
         }
 
-        if (!beanClass.getName().contains("Test")) {
-            return DO_NOT_PROXY;
-        }
-
         return getAdviceFor(beanDefinition);
     }
 

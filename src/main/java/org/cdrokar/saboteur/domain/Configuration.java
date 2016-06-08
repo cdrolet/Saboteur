@@ -5,6 +5,8 @@ import lombok.Data;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import org.cdrokar.saboteur.reader.ConfigReader;
+
 import com.typesafe.config.Config;
 
 @Data
@@ -19,9 +21,9 @@ public class Configuration {
     private Collection<TargetProfile> targetProfiles;
 
     public Configuration(Config config) {
-        displayBanner = config.getBoolean("displayBanner");
-        displayConfig = config.getBoolean("displayConfig");
-        infiltrateAll = config.getBoolean("infiltrateAll");
+        displayBanner = ConfigReader.INSTANCE.read(config, "displayBanner", true);
+        displayConfig = ConfigReader.INSTANCE.read(config, "displayConfig", true);
+        infiltrateAll = ConfigReader.INSTANCE.read(config, "infiltrateAll", false);
 
         targetProfiles = config.getConfigList("targets")
                 .stream()
