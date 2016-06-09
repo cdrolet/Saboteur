@@ -1,19 +1,17 @@
 package org.cdrokar.saboteur.infiltration;
 
 import lombok.Data;
+
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-import org.cdrokar.saboteur.domain.BeanDefinition;
-import org.cdrokar.saboteur.invocation.InvocationWorkflow;
+import org.cdrokar.saboteur.invocation.InvocationWorkflowSupplier;
 import org.cdrokar.saboteur.invocation.SourceInvocation;
 
-import java.util.function.Supplier;
-
 @Data
-public class TargetMethodInterceptor implements MethodInterceptor {
+public class BeanMethodInterceptor implements MethodInterceptor {
 
     private final BeanDefinition beanDefinition;
-    private final Supplier<InvocationWorkflow> supplier;
+    private final InvocationWorkflowSupplier supplier;
 
     @Override
     public Object invoke(MethodInvocation methodInvocation) throws Throwable {

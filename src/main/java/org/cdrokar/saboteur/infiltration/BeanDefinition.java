@@ -1,8 +1,8 @@
-package org.cdrokar.saboteur.domain;
+package org.cdrokar.saboteur.infiltration;
 
 import lombok.Data;
 
-import org.cdrokar.saboteur.SaboteurRepository;
+import org.cdrokar.saboteur.SaboteurConfiguration;
 
 @Data
 public class BeanDefinition {
@@ -16,6 +16,6 @@ public class BeanDefinition {
 
     public boolean isSaboteurBean() {
         return beanClass.getPackage() != null
-                && beanClass.getPackage().getName().startsWith(SaboteurRepository.class.getPackage().getName());
+                && beanClass.getPackage().getName().startsWith(SaboteurConfiguration.class.getPackage().getName());
     }
 }

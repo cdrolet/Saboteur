@@ -1,13 +1,10 @@
 package org.cdrokar.saboteur.invocation;
 
-import org.cdrokar.saboteur.domain.BeanDefinition;
-import org.cdrokar.saboteur.domain.BeanDefinition;
 import lombok.Data;
-import org.aopalliance.intercept.MethodInvocation;
 
-/**
- * Created by cdrolet on 3/4/2016.
- */
+import org.aopalliance.intercept.MethodInvocation;
+import org.cdrokar.saboteur.infiltration.BeanDefinition;
+
 @Data
 public class SourceInvocation {
 

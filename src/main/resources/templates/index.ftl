@@ -21,11 +21,11 @@
             <th>Path</th>
             <th>State</th>
         </tr>
-        <#list model["targets"] as target>
+        <#list model["actions"] as action>
             <tr>
-                <td>${target.alias}</td>
-                <td>${target.classPath}</td>
-                <td>${target.disrupted?string('active', 'inactive')}</td>
+                <td>${action.name}</td>
+                <td>${action.classPath}</td>
+                <td>${action.active?string('active', 'inactive')}</td>
             </tr>
         </#list>
 

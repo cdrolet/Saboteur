@@ -1,14 +1,13 @@
 package org.cdrokar.saboteur.exception;
 
-import com.google.common.collect.ImmutableMap;
 import lombok.RequiredArgsConstructor;
 
-import javax.script.ScriptException;
 import java.util.Map;
 
-/**
- * Created by cdrolet on 4/1/2016.
- */
+import javax.script.ScriptException;
+
+import com.google.common.collect.ImmutableMap;
+
 @RequiredArgsConstructor
 public class JavaScriptException extends RuntimeException{
 

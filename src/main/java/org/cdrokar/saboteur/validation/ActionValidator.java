@@ -8,39 +8,39 @@ import java.util.stream.Collectors;
 
 import org.cdrokar.saboteur.disruption.Disruptive;
 import org.cdrokar.saboteur.domain.Instruction;
-import org.cdrokar.saboteur.domain.TargetProfile;
+import org.cdrokar.saboteur.domain.Action;
 import org.cdrokar.saboteur.exception.ValidationException;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 
-public enum TargetProfileValidator implements Consumer<TargetProfile> {
+public enum ActionValidator implements Consumer<Action> {
 
     INSTANCE;
 
     @Override
-    public void accept(TargetProfile targetProfile) {
+    public void accept(Action action) {
 
-        checkAlias(targetProfile.getAlias(), targetProfile.getClassPath());
+        checkAlias(action.getName(), action.getTargetClassPath());
 
-        checkClassPath(targetProfile.getAlias(), targetProfile.getClassPath(), targetProfile.isTargetSubclass());
+        checkClassPath(action.getName(), action.getTargetClassPath(), action.isWithSubclass());
 
-        checkMethod(targetProfile.getClassPath(), targetProfile.getMethod());
+        checkMethod(action.getTargetClassPath(), action.getMethod());
 
-        checkInstructions(targetProfile.getInstructions());
+        checkInstructions(action.getInstructions());
     }
 
-    private void checkAlias(String alias, String classPath) {
-        if (Strings.isNullOrEmpty(alias)) {
-            String path = Strings.isNullOrEmpty(classPath) ? "{undefined}" : classPath;
-            throw new ValidationException(ValidationException.Type.ALIAS_IS_UNDEFINED, path);
+    private void checkAlias(String name, String classPath) {
+        if (Strings.isNullOrEmpty(name)) {
+            String path = Strings.isNullOrEmpty(classPath) ? "{classpath undefined}" : classPath;
+            throw new ValidationException(ValidationException.Type.NAME_IS_UNDEFINED, path);
         }
     }
 
     private void checkClassPath(String alias, String classPath, boolean isTargettingSubclass) {
         if (Strings.isNullOrEmpty(classPath)) {
-            String aliasName = Strings.isNullOrEmpty(alias) ? "{undefined}" : alias;
-            throw new ValidationException(ValidationException.Type.CLASSPATH_IS_UNDEFINED, aliasName);
+            String name = Strings.isNullOrEmpty(alias) ? "{name undefined}" : alias;
+            throw new ValidationException(ValidationException.Type.CLASSPATH_IS_UNDEFINED, name);
         }
 
         if (classPath.contains("*")) {

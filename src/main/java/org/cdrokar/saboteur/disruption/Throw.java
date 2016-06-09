@@ -75,7 +75,7 @@ public class Throw implements Disruptive {
     private String getMessageFrom(Map<String, String> instructions, SaboteurInvocation invocation) {
         String message = instructions.get(KEY_EXCEPTION_MESSAGE);
         if (Strings.isNullOrEmpty(message)) {
-            return getDetailFrom(invocation);
+            return Disruptive.DEFAULT_MESSAGE;
         }
         return message;
     }

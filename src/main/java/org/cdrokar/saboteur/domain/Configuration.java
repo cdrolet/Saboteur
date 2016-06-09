@@ -14,20 +14,14 @@ public class Configuration {
 
     private final boolean displayBanner;
 
-    private final boolean displayConfig;
-
-    private final boolean infiltrateAll;
-
-    private Collection<TargetProfile> targetProfiles;
+    private Collection<Action> actions;
 
     public Configuration(Config config) {
         displayBanner = ConfigReader.INSTANCE.read(config, "displayBanner", true);
-        displayConfig = ConfigReader.INSTANCE.read(config, "displayConfig", true);
-        infiltrateAll = ConfigReader.INSTANCE.read(config, "infiltrateAll", false);
 
-        targetProfiles = config.getConfigList("targets")
+        actions = config.getConfigList("actions")
                 .stream()
-                .map(c -> TargetProfile.from(c))
+                .map(c -> Action.from(c))
                 .collect(Collectors.toList());
     }
 

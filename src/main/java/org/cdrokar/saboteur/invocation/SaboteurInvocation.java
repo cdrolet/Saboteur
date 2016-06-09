@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.util.List;
 
 import org.cdrokar.saboteur.domain.Instruction;
-import org.cdrokar.saboteur.domain.TargetProfile;
+import org.cdrokar.saboteur.domain.Action;
 
 @Getter
 public class SaboteurInvocation extends SourceInvocation {
@@ -15,9 +15,11 @@ public class SaboteurInvocation extends SourceInvocation {
     public SaboteurInvocation(
             SourceInvocation invocation,
             List<Instruction> instructions) {
+
         super(invocation.getBeanDefinition(), invocation.getMethodInvocation());
+
         if (instructions.isEmpty()) {
-            this.instructions = TargetProfile.DEFAULT.getInstructions();
+            this.instructions = Action.DEFAULT.getInstructions();
         } else {
             this.instructions = instructions;
         }
