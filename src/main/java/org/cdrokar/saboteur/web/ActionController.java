@@ -1,5 +1,6 @@
 package org.cdrokar.saboteur.web;
 
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Collection;
@@ -65,7 +66,18 @@ public class ActionController {
 
     @ExceptionHandler(ValidationException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ValidationException handleValidationException(ValidationException ex) {
-        return ex;
+    public ValidationResponse handleValidationException(ValidationException ex) {
+        return ValidationResponse.of(ex);
+    }
+
+
+    @Data
+    public static class ValidationResponse {
+        private final ValidationException.Type type;
+        private final String message;
+
+        public static ValidationResponse of(ValidationException ex) {
+            return new ValidationResponse(ex.getType(), ex.getMessage());
+        }
     }
 }

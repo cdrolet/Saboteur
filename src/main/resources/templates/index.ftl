@@ -24,7 +24,7 @@
         <#list model["actions"] as action>
             <tr>
                 <td>${action.name}</td>
-                <td>${action.classPath}</td>
+                <td>${action.targetClassPath}</td>
                 <td>${action.active?string('active', 'inactive')}</td>
             </tr>
         </#list>

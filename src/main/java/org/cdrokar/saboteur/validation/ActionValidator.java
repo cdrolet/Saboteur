@@ -7,8 +7,8 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.cdrokar.saboteur.disruption.Disruptive;
-import org.cdrokar.saboteur.domain.Instruction;
 import org.cdrokar.saboteur.domain.Action;
+import org.cdrokar.saboteur.domain.Instruction;
 import org.cdrokar.saboteur.exception.ValidationException;
 
 import com.google.common.base.Joiner;
@@ -25,7 +25,7 @@ public enum ActionValidator implements Consumer<Action> {
 
         checkClassPath(action.getName(), action.getTargetClassPath(), action.isWithSubclass());
 
-        checkMethod(action.getTargetClassPath(), action.getMethod());
+        checkMethod(action.getName(), action.getTargetClassPath(), action.getMethod());
 
         checkInstructions(action.getInstructions());
     }
@@ -37,21 +37,21 @@ public enum ActionValidator implements Consumer<Action> {
         }
     }
 
-    private void checkClassPath(String alias, String classPath, boolean isTargettingSubclass) {
+    private void checkClassPath(String name, String classPath, boolean isTargettingSubclass) {
         if (Strings.isNullOrEmpty(classPath)) {
-            String name = Strings.isNullOrEmpty(alias) ? "{name undefined}" : alias;
-            throw new ValidationException(ValidationException.Type.CLASSPATH_IS_UNDEFINED, name);
+            String sourceName = Strings.isNullOrEmpty(name) ? "{name undefined}" : name;
+            throw new ValidationException(ValidationException.Type.CLASSPATH_IS_UNDEFINED, sourceName);
         }
 
         if (classPath.contains("*")) {
             if (isTargettingSubclass) {
-                throw new ValidationException(ValidationException.Type.PARENT_CLASSPATH_SHOULD_NOT_CONTAIN_WILDCARD, classPath);
+                throw new ValidationException(ValidationException.Type.PARENT_CLASSPATH_SHOULD_NOT_CONTAIN_WILDCARD, name, classPath);
             }
             return;
         }
 
         if (!getClassFromPath(classPath).isPresent()) {
-            throw new ValidationException(ValidationException.Type.INVALID_CLASS_PATH, classPath);
+            throw new ValidationException(ValidationException.Type.INVALID_CLASS_PATH, name, classPath);
         }
     }
 
@@ -87,7 +87,7 @@ public enum ActionValidator implements Consumer<Action> {
         }
     }
 
-    private void checkMethod(String classPath, String method) {
+    private void checkMethod(String name, String classPath, String method) {
         if (method.equals("*") || classPath.contains("*")) {
             return;
         }
@@ -100,7 +100,7 @@ public enum ActionValidator implements Consumer<Action> {
         Arrays.stream(clazz.get().getMethods())
                 .filter((classMethod) -> classMethod.getName().equalsIgnoreCase(method))
                 .findFirst()
-                .orElseThrow(() -> new ValidationException(ValidationException.Type.INVALID_METHOD, method, classPath));
+                .orElseThrow(() -> new ValidationException(ValidationException.Type.INVALID_METHOD, name, method, classPath));
     }
 
     private Optional<Class<?>> getClassFromPath(String classPath) {

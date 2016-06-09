@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -22,7 +21,7 @@ import com.typesafe.config.Config;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Action implements Comparator<Action> {
+public class Action implements Comparable<Action> {
 
     public static final Action DEFAULT = Action.builder()
             .name("default")
@@ -89,41 +88,41 @@ public class Action implements Comparator<Action> {
         return (s) -> s.equalsIgnoreCase(method);
     }
 
-    public int compare(Action o1, Action o2) {
-
-        if (o1.equals(o2)) {
+    @Override
+    public int compareTo(Action action) {
+        if (this.equals(action)) {
             return 0;
         }
 
         // Default profile is the last one
-        if (o1.equals(Action.DEFAULT)) {
+        if (this.equals(Action.DEFAULT)) {
             return 1;
         }
 
-        if (o2.equals(Action.DEFAULT)) {
+        if (this.equals(Action.DEFAULT)) {
             return -1;
         }
 
         // Subclasses profiles are taken last
-        if (o1.isWithSubclass() && !o2.isWithSubclass()) {
+        if (this.isWithSubclass() && !action.isWithSubclass()) {
             return 1;
         }
 
-        if (o2.isWithSubclass() && !o1.isWithSubclass()) {
+        if (action.isWithSubclass() && !this.isWithSubclass()) {
             return -1;
         }
 
         // Wildcards profiles are taken last
-        if (o1.getTargetClassPath().contains("*") && !o2.getTargetClassPath().contains("*")) {
+        if (this.getTargetClassPath().contains("*") && !action.getTargetClassPath().contains("*")) {
             return 1;
         }
 
-        if (o2.getTargetClassPath().contains("*") && !o1.getTargetClassPath().contains("*")) {
+        if (action.getTargetClassPath().contains("*") && !this.getTargetClassPath().contains("*")) {
             return -1;
         }
 
         // Classpath length (longer path taken precedence)
-        return Integer.compare(o2.getTargetClassPath().length(), o1.getTargetClassPath().length());
-    }
+        return Integer.compare(action.getTargetClassPath().length(), this.getTargetClassPath().length());
 
+    }
 }
